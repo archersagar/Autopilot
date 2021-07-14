@@ -1,8 +1,10 @@
 import numpy as np
 import cv2
-from keras.models import load_model
+#from keras.models import load_model
+import tensorflow as tf
+from tensorflow import keras
 
-model = load_model('models/Autopilot.h5')
+model = keras.models.load_model('models/Autopilot.h5')
 
 def keras_predict(model, image):
     processed = keras_process_image(image)
