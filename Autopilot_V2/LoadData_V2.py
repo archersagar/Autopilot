@@ -9,8 +9,8 @@ from itertools import islice
 
 LIMIT = None
 
-DATA_FOLDER = 'driving_dataset'
-TRAIN_FILE = os.path.join(DATA_FOLDER, 'data.txt')
+DATA_FOLDER = './driving_dataset'
+TRAIN_FILE = './driving_dataset/data.txt'
 
 def preprocess(img):
     resized = cv2.resize((cv2.cvtColor(img, cv2.COLOR_RGB2HSV))[:, :, 1], (100, 100))

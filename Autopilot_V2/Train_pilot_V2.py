@@ -1,50 +1,52 @@
 import numpy as np
-from keras.layers import Dense, Activation, Flatten, Conv2D, Lambda
-from keras.layers import MaxPooling2D, Dropout
-from keras.utils import print_summary
-from keras.models import Sequential
-from keras.callbacks import ModelCheckpoint
-import keras.backend as K
+#from keras.layers import Dense, Activation, Flatten, Conv2D, Lambda
+#from keras.layers import MaxPooling2D, Dropout
+#from keras.utils import print_summary
+#from keras.models import Sequential
+#from keras.callbacks import ModelCheckpoint
+#import keras.backend as K
 import pickle
+import tensorflow as tf
+from tensorflow import keras
 
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 
 
 def keras_model(image_x, image_y):
-    model = Sequential()
-    model.add(Lambda(lambda x: x / 127.5 - 1., input_shape=(image_x, image_y, 1)))
-    model.add(Conv2D(32, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D((2, 2), padding='valid'))
-    model.add(Conv2D(32, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D((2, 2), padding='valid'))
+    model = keras.models.Sequential()
+    model.add(keras.layers.Lambda(lambda x: x / 127.5 - 1., input_shape=(image_x, image_y, 1)))
+    model.add(keras.layers.Conv2D(32, (3, 3), padding='same'))
+    model.add(keras.layers.Activation('relu'))
+    model.add(keras.layers.MaxPooling2D((2, 2), padding='valid'))
+    model.add(keras.layers.Conv2D(32, (3, 3), padding='same'))
+    model.add(keras.layers.Activation('relu'))
+    model.add(keras.layers.MaxPooling2D((2, 2), padding='valid'))
 
-    model.add(Conv2D(64, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D((2, 2), padding='valid'))
-    model.add(Conv2D(64, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D((2, 2), padding='valid'))
+    model.add(keras.layers.Conv2D(64, (3, 3), padding='same'))
+    model.add(keras.layers.Activation('relu'))
+    model.add(keras.layers.MaxPooling2D((2, 2), padding='valid'))
+    model.add(keras.layers.Conv2D(64, (3, 3), padding='same'))
+    model.add(keras.layers.Activation('relu'))
+    model.add(keras.layers.MaxPooling2D((2, 2), padding='valid'))
 
-    model.add(Conv2D(128, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D((2, 2), padding='valid'))
-    model.add(Conv2D(128, (3, 3), padding='same'))
-    model.add(Activation('relu'))
-    model.add(MaxPooling2D((2, 2), padding='valid'))
+    model.add(keras.layers.Conv2D(128, (3, 3), padding='same'))
+    model.add(keras.layers.Activation('relu'))
+    model.add(keras.layers.MaxPooling2D((2, 2), padding='valid'))
+    model.add(keras.layers.Conv2D(128, (3, 3), padding='same'))
+    model.add(keras.layers.Activation('relu'))
+    model.add(keras.layers.MaxPooling2D((2, 2), padding='valid'))
 
-    model.add(Flatten())
-    model.add(Dropout(0.5))
-    model.add(Dense(1024))
-    model.add(Dense(256))
-    model.add(Dense(64))
-    model.add(Dense(1))
+    model.add(keras.layers.Flatten())
+    model.add(keras.layers.Dropout(0.5))
+    model.add(keras.layers.Dense(1024))
+    model.add(keras.layers.Dense(256))
+    model.add(keras.layers.Dense(64))
+    model.add(keras.layers.Dense(1))
 
-    model.compile(optimizer='adam', loss="mse")
+    model.compile(optimizer=keras.optimizers.Adam(lr=0.0001), loss="mse")
     filepath = "models/Autopilot_10.h5"
-    checkpoint = ModelCheckpoint(filepath, verbose=1, save_best_only=True)
+    checkpoint = keras.callbacks.ModelCheckpoint(filepath, verbose=1, save_best_only=True)
     callbacks_list = [checkpoint]
 
     return model, callbacks_list
@@ -69,10 +71,10 @@ def main():
     model, callbacks_list = keras_model(100, 100)
     model.fit(train_x, train_y, validation_data=(test_x, test_y), epochs=3, batch_size=32,
               callbacks=callbacks_list)
-    print_summary(model)
+    model.summary()
 
     model.save('models/Autopilot_10.h5')
 
 
 main()
-K.clear_session();
+#K.clear_session();
